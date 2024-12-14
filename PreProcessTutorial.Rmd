@@ -1,0 +1,85 @@
+## Data Preprocessing with simpleEnsembleGroup6
+
+### Overview
+
+Effective data preparation is crucial for the success of any modeling process. The pre_process function in the simpleEnsembleGroup6 package automates critical steps such as handling missing values, encoding binary and categorical variables, and applying one-hot encoding to prepare the data for modeling.
+
+### Getting Started
+
+#### Loading the Package
+
+Before using the pre_process function, ensure that simpleEnsembleGroup6 and caret are loaded, as caret is used for creating dummy variables:
+
+```{r}
+# Load necessary libraries
+library(simpleEnsembleGroup6)
+library(caret)
+```
+
+### Data Preparation
+
+#### Example Dataset
+
+For demonstration, let's use the iris dataset which includes both numeric and categorical variables:
+
+```{r}
+# Load the iris dataset
+data(iris)
+head(iris)
+```
+
+#### Initial Preprocessing Steps
+
+This function begins by combining predictors and the response into one dataframe, removing any rows with missing values, and categorizing columns into numeric, binary, or categorical based on their characteristics.
+
+### Using the pre_process Function
+
+The pre_process function simplifies data preprocessing by automating several tasks.
+
+#### Function Usage
+
+```{r}
+# Assuming 'Species' is the response variable in iris dataset
+X <- iris[, -which(names(iris) == "Species")]
+y <- iris$Species
+
+# Pre-process the data
+processed_data <- pre_process(X, y)
+```
+
+### Details of Preprocessing Steps
+
+1.  *Combining Data*: The function starts by combining the predictor and response variables into a single dataframe.
+2.  *Removing Missing Values*: Rows containing NA are removed to ensure the dataset is complete for analysis.
+3.  *Column Classification*: Identifies numeric, binary, and categorical columns:
+    -   *Numeric Columns*: Continuously valued columns.
+    -   *Binary Columns*: Columns with exactly two unique values.
+    -   *Categorical Columns*: Non-numeric columns with more than two unique values.
+4.  *Binary Encoding*: Converts binary columns to 0 and 1 based on their unique values.
+5.  *Factor Conversion*: Converts categorical columns into factors to prepare them for one-hot encoding.
+6.  *One-Hot Encoding*: Applies one-hot encoding to categorical factors, transforming them into a series of binary columns.
+
+#### Visualizing and Verifying Data
+
+After preprocessing, it's helpful to inspect the data to ensure all transformations have been applied correctly:
+
+```{r}
+# print processed data
+processed_data
+
+# Print structure of the processed data
+print(str(processed_data))
+
+# Summary of the processed data
+summary(processed_data)
+```
+
+### Conclusion
+
+This vignette provides a detailed guide on using the pre_process function from the simpleEnsembleGroup6 package. By automating the preprocessing steps, this function ensures that the data is appropriately formatted and ready for effective modeling. Utilizing such preprocessing techniques helps in achieving more reliable and accurate modeling outcomes.
+
+For further customization and additional preprocessing needs, explore more functionalities provided by the caret package:
+
+```{r}
+?dummyVars
+```

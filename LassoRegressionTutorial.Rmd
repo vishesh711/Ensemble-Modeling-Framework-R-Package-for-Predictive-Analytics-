@@ -1,0 +1,111 @@
+---
+title: "Lasso Regression Tutorial"
+author: 
+  - "Group 6"
+date: "2024-05-03"
+output: 
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Lasso Regression Tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Lasso Regression with simpleEnsembleGroup6
+
+### Overview
+
+Lasso regression (Least Absolute Shrinkage and Selection Operator) is a type of linear regression that uses shrinkage. Shrinkage is where data values are shrunk towards a central point, like the mean. The lasso techniques are useful when dealing with multicollinearity or when you want to automate certain parts of model selection, like variable selection/parameter elimination and parameter shrinkage.
+
+### Getting Started
+
+#### Installing and Loading the Package
+
+Ensure that simpleEnsembleGroup6 and glmnet, which is required for lasso regression, are installed and loaded:
+
+```{r}
+# Install glmnet if not already installed
+if (!require(glmnet)) install.packages("glmnet", dependencies = TRUE)
+
+# Load necessary libraries
+library(simpleEnsembleGroup6)
+library(glmnet)
+```
+
+### Data Preparation
+
+#### The Dataset
+
+For this example, we'll continue using the mtcars dataset. We will predict the mpg (miles per gallon) using other car attributes.
+
+```{r}
+# Load and prepare the mtcars dataset
+data(mtcars)
+head(mtcars)
+```
+
+#### Preprocessing Steps
+
+Prepare the data by selecting predictors and ensuring there are no missing values:
+
+```{r}
+# Handling missing values if any
+mtcars <- na.omit(mtcars)
+
+# Standardizing predictors might be beneficial for lasso to scale them equally
+mtcars$disp <- scale(mtcars$disp)
+mtcars$hp <- scale(mtcars$hp)
+mtcars$wt <- scale(mtcars$wt)
+
+# Defining the response variable and predictors
+y <- mtcars$mpg
+X <- as.matrix(mtcars[, c("disp", "hp", "wt")])  # glmnet needs matrix format
+```
+
+### Fitting a Lasso Model
+
+Using the lasso_regression function, we fit a lasso model to the prepared dataset.
+
+#### Function Usage
+
+```{r}
+# Fitting the lasso model
+model <- lasso_regression(y, X)
+```
+
+### Results and Interpretation
+
+After fitting the model, the next step is to review and interpret the coefficients of the lasso model, which will indicate the importance and impact of each variable.
+
+```{r}
+# Display model coefficients
+print(coef(model))
+```
+
+Lasso regression can drive some coefficients to zero, effectively performing variable selection. The non-zero coefficients are the predictors that contribute most to predicting the target variable.
+
+### Model Tuning
+
+Adjusting the regularization parameter, lambda, can influence the model's complexity. The optimal lambda minimizes cross-validation error.
+
+```{r}
+# Finding optimal lambda through cross-validation
+cv_model <- cv.glmnet(X, y)
+plot(cv_model)
+best_lambda <- cv_model$lambda.min
+cat("Best lambda:", best_lambda)
+
+# Refitting the model with the best lambda
+best_model <- lasso_regression(y, X, lambda = best_lambda)
+```
+
+### Conclusion
+
+This vignette section has demonstrated how to effectively apply lasso regression using the lasso_regression function from the simpleEnsembleGroup6 package. It covered theoretical aspects, data preparation, model fitting, result interpretation, and lambda optimization to help users leverage this powerful technique in their analyses.
+
+For further exploration, refer to the glmnet package documentation and the function's help page:
+
+```{r}
+?glmnet
+?lasso_regression
+```

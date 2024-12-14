@@ -1,0 +1,92 @@
+---
+title: "Linear or Logistic Regression Tutorial"
+author: 
+  - "Group 6"
+date: "2024-05-03"
+output: 
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Linear or Logistic Regression Tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Regression Analysis with simpleEnsembleGroup6
+
+### Overview
+
+Regression analysis is fundamental to predictive modeling, providing insights into relationships between dependent and independent variables. In simpleEnsembleGroup6, the function linear_logistic_regression() is designed to adaptively choose between linear and logistic regression based on the type of the response variable. This vignette details the use of this function using the mtcars dataset.
+
+### Getting Started
+
+#### Installing and Loading the Package
+
+First, ensure that the simpleEnsembleGroup6 package is installed and loaded into your R environment:
+
+```{r}
+# Install the package if it's not already installed (uncomment the next line)
+# install.packages("simpleEnsembleGroup6")
+
+# Load the package
+library(simpleEnsembleGroup6)
+```
+
+### Data Preparation
+
+#### The mtcars Dataset
+
+The mtcars dataset contains data from Motor Trend's 1974 car road tests. It includes various metrics such as miles per gallon, displacement, horsepower, and weight.
+
+```{r}
+# Load and examine the mtcars dataset
+data(mtcars)
+head(mtcars)
+```
+
+#### Preprocessing Steps
+
+Proper data preparation is key to successful model fitting. Here, we'll standardize some predictors and check for missing values.
+
+```{r}
+# Check for and handle missing values
+if (anyNA(mtcars)) {
+  mtcars <- na.omit(mtcars)
+}
+
+# Standardize predictors to have mean zero and unit variance
+mtcars$disp <- scale(mtcars$disp)
+mtcars$hp <- scale(mtcars$hp)
+mtcars$wt <- scale(mtcars$wt)
+
+# Select the response variable and predictors
+y <- mtcars$mpg
+X <- mtcars[, c("disp", "hp", "wt")]
+```
+
+### Model Fitting
+
+Using the prepared dataset, we apply the linear_logistic_regression function to fit an appropriate regression model.
+
+#### Function Usage
+
+```{r}
+# Fitting the model
+model <- linear_logistic_regression(y, X)
+```
+
+### Results and Interpretation
+
+Once the model is fitted, the next step is to interpret the results to understand the effect of each predictor on the response variable.
+
+```{r}
+# Display the summary of the model
+summary(model)
+```
+
+This vignette provided a complete guide on using the linear_logistic_regression function from the simpleEnsembleGroup6 package. It covered theoretical foundations, data preparation, model fitting, and result interpretation, equipping users with the necessary tools to perform regression analysis on their datasets.
+
+For further information, refer to the function's help page within R:
+
+```{r}
+?linear_logistic_regression
+```

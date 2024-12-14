@@ -1,0 +1,63 @@
+## Feature Selection by Correlation with simpleEnsembleGroup6
+
+### Overview
+
+Feature selection is a crucial step in model building, especially in datasets with many variables. The pre_screen_predictors_corr function simplifies this process by calculating the Pearson correlation coefficient between each predictor and the response variable, and then identifying the predictors with the highest absolute correlations.
+
+### Getting Started
+
+#### Loading the Package
+
+Before using the pre_screen_predictors_corr function, make sure simpleEnsembleGroup6 is loaded:
+
+```{r}
+# Load the necessary library
+library(simpleEnsembleGroup6)
+```
+
+### Data Preparation
+
+#### Example Dataset
+
+For demonstration, let's use the mtcars dataset. Assume we are interested in finding predictors that are most linearly related to mpg (miles per gallon).
+
+```{r}
+# Load the mtcars dataset
+data(mtcars)
+```
+
+### Using the pre_screen_predictors_corr Function
+
+This function streamlines the initial step in feature selection by focusing on correlation, a measure of linear association.
+
+#### Function Usage
+
+Here’s how to use the function to find the top predictors for mpg:
+
+```{r}
+# Running the feature selection function
+y <- mtcars$mpg
+X <- as.matrix(mtcars[, -which(names(mtcars) == "mpg")])
+top_predictors <- pre_screen_predictors_corr(X, y, top_k = 5)
+```
+
+### Results and Interpretation
+
+After running the function, it's useful to examine which predictors are most strongly correlated with the response variable:
+
+```{r}
+# Print the top predictors
+print(top_predictors)
+```
+
+This will give you a list of the top 5 predictors based on their absolute correlation with mpg.
+
+### Details of the Process
+
+1.  *Data Processing*: Initially, the data is preprocessed to ensure it is ready for analysis, handling missing values and encoding categorical variables.
+2.  *Correlation Calculation*: The function calculates the Pearson correlation coefficient for each predictor against the response variable, considering only complete cases.
+3.  *Feature Selection*: It sorts the predictors by the absolute value of their correlation and returns the names of the top specified number (top_k) of predictors.
+
+### Conclusion
+
+The pre_screen_predictors_corr function is an efficient tool for preliminary feature selection in any predictive modeling process. By identifying strong linear relationships, it allows for a focused approach in subsequent model development stages.
